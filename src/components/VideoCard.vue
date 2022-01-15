@@ -16,8 +16,8 @@
       </div>
       <fa-icon icon="heart"
                v-on:click.stop
-               :color="[video.favorite ? '#ff1744' : '#616161']"
-               @click="$emit('addToFavorites', video.id)"
+               :color="[isFavorite(video) ? '#ff1744' : '#616161']"
+               @click="toggleFavorite(video)"
       />
     </div>
   </div>
@@ -26,6 +26,7 @@
 <script>
 import ImageContent from "@/components/ImageContent";
 import {VIDEO} from "@/router/routes";
+import {mapActions, mapGetters} from "vuex";
 
 export default {
   name: "VideoCard",
@@ -42,7 +43,11 @@ export default {
     navigateToVideoPage() {
       this.$router.push({ path: VIDEO, query: { v: this.video.id } })
     },
+    ...mapActions(['toggleFavorite']),
   },
+  computed: {
+    ...mapGetters(['isFavorite']),
+  }
 }
 </script>
 

@@ -3,18 +3,22 @@
     <span v-if="this.$route.path === routes.HOME"
           class="navigate-button" @click="navigateToFavorites"
     >
-      Favorites <fa-icon icon="heart" />
+      Favorites
+      <span v-if="favoriteCount">{{favoriteCount}}</span>
+      <fa-icon v-else icon="heart" />
     </span>
     <span v-else class="navigate-button"
           @click="$router.push(routes.HOME)"
     >
-      Home Page <fa-icon :icon="['fab', 'youtube']" />
+      Home Page
+      <fa-icon :icon="['fab', 'youtube']" />
     </span>
   </div>
 </template>
 
 <script>
 import * as ROUTES from "@/router/routes";
+import {mapGetters} from "vuex";
 
 export default {
   name: "TopBar",
@@ -31,6 +35,14 @@ export default {
       this.$router.push(ROUTES.FAVORITES.replace(':userId', 'bootcamp'));
     },
   },
+  computed: {
+    ...mapGetters({
+      favoriteCount: 'getFavoritesCount',
+    }),
+  },
+  mounted() {
+    console.log(this.favoriteCount)
+  }
 }
 </script>
 

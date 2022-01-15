@@ -1,30 +1,23 @@
 <template>
   <div class="container">
-    <VIdeoItem v-for="video in favoriteVideos"
+    <VIdeoItem v-for="video in getFavorites"
                :key="video.id"
                :video="video" />
   </div>
 </template>
 
 <script>
-import {getVideos} from "@/utils/api";
 import VIdeoItem from "@/components/VideoItem";
+import {mapGetters} from "vuex";
 
 export default {
   name: "FavoritesPage",
   components: {VIdeoItem},
-  data() {
-    return {
-      videos: [],
-    }
-  },
   computed: {
-    favoriteVideos() {
-      return this.videos.filter(video => video.favorite);
-    }
+    ...mapGetters(['getFavorites']),
   },
-  async mounted() {
-    this.videos = await getVideos();
+  mounted() {
+    console.log(this.getFavorites)
   }
 }
 </script>
