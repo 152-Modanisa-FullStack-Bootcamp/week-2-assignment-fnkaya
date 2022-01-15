@@ -1,78 +1,60 @@
 <template>
-  <div class="card">
-    <img class="image"
-         :src="image"
-         :alt="data.title"
-         @mouseover="setHoverImage"
-         @mouseout="setCoverImage"
-         @click="navigateToVideoPage" />
+  <div class="video-card-container" @click="navigateToVideoPage">
+    <ImageContent v-bind="video" />
     <div class="card-content">
-      <div>
-        <img class="owner-image"
-             :src="data.ownerImage"
-             :alt="data.ownerName">
-      </div>
+      <img class="owner-image"
+           :src="video.ownerImage"
+           :alt="video.ownerName"
+      />
       <div class="video-details">
-        <h3 class="video-title">{{data.title}}</h3>
-        <div class="owner-name">{{data.ownerName}}</div>
+        <h3 class="video-title">{{video.title}}</h3>
+        <div class="owner-name">{{video.ownerName}}</div>
         <div class="video-infos">
-          <span class="view-count">{{data.viewCount}} görüntülenme</span>
-          <span class="publish-date">{{data.publishDateInMonth}} ay önce</span>
-          <fa-icon icon="heart" />
+          <span class="view-count">{{video.viewCount}} görüntülenme</span>
+          <span class="publish-date">{{video.publishDateInMonth}} ay önce</span>
         </div>
       </div>
+      <fa-icon icon="heart"
+               v-on:click.stop
+               :color="[video.favorite ? '#ff1744' : '#616161']"
+               @click="$emit('addToFavorites', video.id)"
+      />
     </div>
   </div>
 </template>
 
 <script>
+import ImageContent from "@/components/ImageContent";
 import {VIDEO} from "@/router/routes";
 
 export default {
   name: "VideoCard",
+  components: {
+    ImageContent,
+  },
   props: {
-    data: {
+    video: {
       type: Object,
       required: true,
-    }
-  },
-  data() {
-    return {
-      image: this.data.coverImage,
-    }
+    },
   },
   methods: {
-    setHoverImage() {
-      this.image = this.data.hoverImage;
-    },
-    setCoverImage() {
-      this.image = this.data.coverImage;
-    },
     navigateToVideoPage() {
-      this.$router.push({ path: VIDEO, query: { id: this.data.id } })
-    }
+      this.$router.push({ path: VIDEO, query: { v: this.video.id } })
+    },
   },
 }
 </script>
 
 <style scoped>
-.card {
+.video-card-container {
   width: min-content;
-  border-radius: 16px;
   cursor: pointer;
-  transition: transform .5s, color .5s;
+  transition: transform .5s, background-color .5s;
 }
-.card:hover {
+.video-card-container:hover {
   background-color: var(--color-white);
   transform: scale(1.15, 1.15);
-}
-.image {
-  height: 200px;
-  width: 360px;
-  transition: border-radius .5s;
-}
-.image:hover {
-  border-radius: 16px 16px 0 0;
 }
 .card-content {
   display: flex;
@@ -81,6 +63,7 @@ export default {
   height: 100px;
   width: 100%;
   font-size: .8em;
+  position: relative;
 }
 .owner-image {
   height: 36px;
@@ -102,8 +85,15 @@ export default {
   content: '·';
   margin: 0 4px;
 }
-.video-infos > svg {
+.card-content > svg {
   float: right;
   font-size: 1.5em;
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  transition: font-size .3s;
+}
+.card-content > svg:hover {
+  font-size: 2em;
 }
 </style>

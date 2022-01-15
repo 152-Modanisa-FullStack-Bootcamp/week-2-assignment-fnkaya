@@ -1,6 +1,9 @@
 <template>
   <div class="container">
-    <VideoCard v-for="video in videos" :key="video.id" :data="video" />
+    <VideoCard v-for="video in videos"
+               :key="video.id"
+               :video="video"
+    />
   </div>
 </template>
 
@@ -11,16 +14,16 @@ import {getVideos} from "@/utils/api";
 export default {
   name: "HomePage",
   components: {
-    VideoCard
+    VideoCard,
   },
   data() {
     return {
       videos: [],
+      favorites: [],
     }
   },
-  async created() {
-    const { data } = await getVideos();
-    this.videos = data;
+  async mounted() {
+    this.videos = await getVideos();
   }
 }
 </script>

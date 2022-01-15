@@ -1,45 +1,49 @@
 <template>
-  <div class="container">
-    <input type="text" class="search-box" placeholder="Search video..." v-model="keyword">
-    <span class="favorite-box" @click="navigateToFavorites">
-      Favorites
-      <fa-icon icon="heart" />
+  <div class="top-bar-container">
+    <span v-if="this.$route.path === routes.HOME"
+          class="navigate-button" @click="navigateToFavorites"
+    >
+      Favorites <fa-icon icon="heart" />
+    </span>
+    <span v-else class="navigate-button"
+          @click="$router.push(routes.HOME)"
+    >
+      Home Page <fa-icon :icon="['fab', 'youtube']" />
     </span>
   </div>
 </template>
 
 <script>
-import {FAVORITES} from "@/router/routes";
+import * as ROUTES from "@/router/routes";
 
 export default {
   name: "TopBar",
+  props: {
+    favoriteVideos: Array,
+  },
+  data() {
+    return {
+      routes: ROUTES,
+    }
+  },
   methods: {
     navigateToFavorites() {
-      this.$router.push(FAVORITES.replace(':userId', 'bootcamp'));
-    }
-  }
+      this.$router.push(ROUTES.FAVORITES.replace(':userId', 'bootcamp'));
+    },
+  },
 }
 </script>
 
 <style scoped>
-.container {
+.top-bar-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
-  padding: 16px 32px;
+  padding: 16px 96px;
+  background-color: var(--color-background-light);
   box-shadow: 0 1px 10px 1px var(--color-background-dark);
 }
-.search-box {
-  width: 40vw;
-  padding: 8px 16px;
-  border: none;
-  border-radius: 32px;
-  outline: none;
-}
-.search-box:focus {
-  box-shadow: 0 0 10px 3px var(--color-white);
-}
-.favorite-box {
+.navigate-button {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -51,7 +55,7 @@ export default {
   background-color: var(--color-button-secondary);
   transition: box-shadow .5s;
 }
-.favorite-box:hover {
+.navigate-button:hover {
   box-shadow: 0 0 10px 3px var(--color-button-secondary);
 }
 </style>
