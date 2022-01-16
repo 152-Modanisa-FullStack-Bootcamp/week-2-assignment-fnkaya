@@ -1,6 +1,7 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import * as ROUTES from "@/router/routes"
+import HomePage from "@/views/HomePage";
 
 Vue.use(VueRouter);
 
@@ -11,7 +12,7 @@ const router = new VueRouter({
     routes: [
         {
             path: ROUTES.HOME,
-            component: () => import('@/views/HomePage'),
+            component: HomePage,
         },
         {
             path: ROUTES.VIDEO,
